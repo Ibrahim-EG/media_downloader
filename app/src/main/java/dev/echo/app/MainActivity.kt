@@ -17,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,7 +29,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.echo.app.ui.MainViewModel
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -48,11 +48,7 @@ fun MainScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text("ECHO")
-                }
-            )
+            TopAppBar(title = { Text("ECHO") })
         }
     ) { padding ->
         Column(
@@ -74,12 +70,10 @@ fun MainScreen(
             Row {
                 Button(
                     onClick = { viewModel.parseUrl() },
-                    enabled = !state.isLoading
+                    enabled = !state.isLoading && !state.isDownloading
                 ) {
                     if (state.isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(18.dp)
-                        )
+                        CircularProgressIndicator(modifier = Modifier.size(18.dp))
                     } else {
                         Text("Parse Link")
                     }
@@ -87,44 +81,24 @@ fun MainScreen(
             }
 
             state.error?.let { error ->
-                Text(
-                    text = error,
-                    color = MaterialTheme.colorScheme.error
-                )
+                Text(text = error, color = MaterialTheme.colorScheme.error)
+            }
+
+            state.successMessage?.let { success ->
+                Text(text = success, color = MaterialTheme.colorScheme.primary)
             }
 
             state.result?.let { media ->
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                Card(modifier = Modifier.fillMaxWidth()) {
                     Column(
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(
-                            text = media.title,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-
-                        Text(
-                            text = media.uploader ?: "Unknown uploader",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-
-                        Text(
-                            text = "Platform: ${media.platform.name}",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-
-                        Text(
-                            text = "Audio options found: ${media.audioOptions.size}",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-
-                        Text(
-                            text = "Video options found: ${media.videoOptions.size}",
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                        Text(text = media.title, style = MaterialTheme.typography.titleMedium)
+                        Text(text = media.uploader ?: "Unknown", style = MaterialTheme.typography.bodyMedium)
+                        Text(text = "Platform: ${media.platform.name}", style = MaterialTheme.typography.bodySmall)
+                        Text(text = "Audio options: ${media.audioOptions.size}", style = MaterialTheme.typography.bodySmall)
+                        Text(text = "Video options: ${media.videoOptions.size}", style = MaterialTheme.typography.bodySmall)
 
                         media.bestAudio?.let { audio ->
                             Text(
@@ -133,11 +107,16 @@ fun MainScreen(
                             )
                         }
 
-                        media.bestVideo?.let { video ->
-                            Text(
-                                text = "Best video: ${video.height ?: "?"}p • ${video.ext.uppercase()}",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                        OutlinedButton(
+                            onClick = { viewModel.downloadAudio() },
+                            enabled = !state.isDownloading && !state.isLoading,
+                            modifier = Modifier.padding(top = 8.dp)
+                        ) {
+                            if (state.isDownloading) {
+                                CircularProgressIndicator(modifier = Modifier.size(18.dp))
+                            } else {
+                                Text("Download as MP3 (320kbps)")
+                            }
                         }
                     }
                 }
