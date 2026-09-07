@@ -15,6 +15,11 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.0.1"
+
+        // STRIP DOWN SIZE: Only build for modern 64-bit and 32-bit ARM phones
+        ndk {
+            abiFilters.addAll(listOf("arm64-v8a", "armeabi-v7a"))
+        }
     }
 
     buildTypes {
