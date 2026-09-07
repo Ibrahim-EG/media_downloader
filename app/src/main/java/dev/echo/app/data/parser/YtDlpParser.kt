@@ -1,6 +1,7 @@
 package dev.echo.app.data.parser
 
 import com.yausername.youtubedl_android.YoutubeDL
+import com.yausername.youtubedl_android.YoutubeDLRequest
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,10 +15,10 @@ class YtDlpParser(
     override suspend fun parse(url: String): Result<ParsedMedia> = withContext(dispatcher) {
         try {
             val request = YoutubeDLRequest(url).apply {
-                setOption("--no-playlist")
-                setOption("--dump-json")
-                setOption("--no-warnings")
-                setOption("--skip-download")
+                addOption("--no-playlist")
+                addOption("--dump-json")
+                addOption("--no-warnings")
+                addOption("--skip-download")
             }
 
             val response = YoutubeDL.getInstance().execute(request)
