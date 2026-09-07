@@ -8,10 +8,7 @@ composeBom = "2024.12.01"
 coroutines = "1.10.1"
 serialization = "1.7.3"
 okhttp = "4.12.0"
-
-# If this version fails to sync, check the latest JitPack tag for youtubedl-android.
-# You can replace it with the newest available release.
-youtubedl = "0.16.1"
+youtubedl = "0.18.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,8 +29,8 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 
-youtubedl-library = { group = "com.github.yausername.youtubedl-android", name = "library", version.ref = "youtubedl" }
-youtubedl-ffmpeg = { group = "com.github.yausername.youtubedl-android", name = "ffmpeg", version.ref = "youtubedl" }
+youtubedl-library = { group = "io.github.junkfood02.youtubedl-android", name = "library", version.ref = "youtubedl" }
+youtubedl-ffmpeg = { group = "io.github.junkfood02.youtubedl-android", name = "ffmpeg", version.ref = "youtubedl" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
